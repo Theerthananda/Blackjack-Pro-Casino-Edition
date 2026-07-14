@@ -1380,6 +1380,8 @@ function newGame() {
   currentHand = 1;
   isSplit = false;
   splitHand = [];
+  document.getElementById("split-cards").innerHTML = "";
+renderSplitHand();
   hand1Bet = 0;
   hand2Bet = 0;
   insuranceBet = 0;
