@@ -607,7 +607,6 @@ function dealCard(hand) {
 //=============================
 
 function startGame() {
-
   currentHand = 1;
 
   hand1Bet = 0;
@@ -1082,12 +1081,12 @@ function checkWinner() {
     });
 
     // Reset split state
-isSplit = false;
-currentHand = 1;
-splitHand = [];
-hand1Bet = 0;
-hand2Bet = 0;
-insuranceBet = 0;
+    isSplit = false;
+    currentHand = 1;
+    splitHand = [];
+    hand1Bet = 0;
+    hand2Bet = 0;
+    insuranceBet = 0;
 
     saveGame();
     return;
@@ -1096,7 +1095,6 @@ insuranceBet = 0;
 
   const playerScore = calculateScore(playerCards);
   const dealerScore = calculateScore(dealerCards);
-
 
   console.log(currentBet);
 
@@ -1380,8 +1378,14 @@ function newGame() {
   currentHand = 1;
   isSplit = false;
   splitHand = [];
-  document.getElementById("split-cards").innerHTML = "";
-renderSplitHand();
+  const splitCards = document.getElementById("split-cards");
+
+  splitCards.innerHTML = "";
+  splitCards.style.display = "none";
+
+  document.getElementById("hand2-title").style.display = "none";
+  document.getElementById("split-score-container").style.display = "none";
+  document.getElementById("split-score").textContent = "0";
   hand1Bet = 0;
   hand2Bet = 0;
   insuranceBet = 0;
