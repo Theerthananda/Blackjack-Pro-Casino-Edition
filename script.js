@@ -108,244 +108,208 @@ const splitSound = new Audio("sounds/split.mp3");
 const rollingSound = new Audio("sounds/rolling.mp3");
 
 function playRollingSound() {
+  if (!soundEnabled) return;
 
-    if (!soundEnabled) return;
+  rollingSound.currentTime = 0;
 
-    rollingSound.currentTime = 0;
-
-    rollingSound.play();
-
+  rollingSound.play();
 }
 
 function playButtonSound() {
-
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   buttonSound.currentTime = 0;
   buttonSound.play();
 }
 
 function playDealSound() {
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   dealSound.currentTime = 0;
   dealSound.play();
 }
 
 function playWinSound() {
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   winSound.currentTime = 0;
   winSound.play();
 }
 
 function playLoseSound() {
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   loseSound.currentTime = 0;
   loseSound.play();
 }
 
 function playBlackjackSound() {
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   blackjackSound.currentTime = 0;
   blackjackSound.play();
 }
 
 function playSplitSound() {
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   splitSound.currentTime = 0;
   splitSound.play();
 }
 
 function playChipSound() {
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   chipSound.currentTime = 0;
   chipSound.play();
 }
 
 function playBustSound() {
-    if (!soundEnabled) return;
+  if (!soundEnabled) return;
   bustSound.currentTime = 0;
 
   bustSound.play();
 }
 
 function saveGame() {
-
-    localStorage.setItem("blackjackBalance", playerBalance);
-    localStorage.setItem("blackjackWins", wins);
-    localStorage.setItem("blackjackLosses", losses);
-    localStorage.setItem("blackjackGames", gamesPlayed);
-    localStorage.setItem("blackjackBlackjacks", blackjacks);
-
+  localStorage.setItem("blackjackBalance", playerBalance);
+  localStorage.setItem("blackjackWins", wins);
+  localStorage.setItem("blackjackLosses", losses);
+  localStorage.setItem("blackjackGames", gamesPlayed);
+  localStorage.setItem("blackjackBlackjacks", blackjacks);
 }
 
 function loadGame() {
+  playerBalance = Number(localStorage.getItem("blackjackBalance")) || 1000;
+  wins = Number(localStorage.getItem("blackjackWins")) || 0;
+  losses = Number(localStorage.getItem("blackjackLosses")) || 0;
+  gamesPlayed = Number(localStorage.getItem("blackjackGames")) || 0;
+  blackjacks = Number(localStorage.getItem("blackjackBlackjacks")) || 0;
+  const savedSound = localStorage.getItem("blackjackSound");
 
-    playerBalance = Number(localStorage.getItem("blackjackBalance")) || 1000;
-    wins = Number(localStorage.getItem("blackjackWins")) || 0;
-    losses = Number(localStorage.getItem("blackjackLosses")) || 0;
-    gamesPlayed = Number(localStorage.getItem("blackjackGames")) || 0;
-    blackjacks = Number(localStorage.getItem("blackjackBlackjacks")) || 0;
-    const savedSound = localStorage.getItem("blackjackSound");
-
-if (savedSound !== null) {
-
+  if (savedSound !== null) {
     soundEnabled = savedSound === "true";
+  }
 
-}
+  balanceEl.textContent = `$${playerBalance}`;
 
-    balanceEl.textContent = `$${playerBalance}`;
-
-    updateStats();
-
+  updateStats();
 }
 
 function generateBankroll() {
-const random = Math.random() * 100;
+  const random = Math.random() * 100;
 
   let bankroll = 0;
 
-if (random < 10) {
-
+  if (random < 10) {
     bankroll = 500;
-
-}
-else if (random < 60) {
-
+  } else if (random < 60) {
     bankroll = 1000;
-
-}
-else if (random < 80) {
-
+  } else if (random < 80) {
     bankroll = 1500;
-
-}
-else if (random < 95) {
-
+  } else if (random < 95) {
     bankroll = 2000;
-
-}
-else {
-
+  } else {
     bankroll = 5000;
+  }
 
-}
-
-    chipButtons.forEach(chip => {
+  chipButtons.forEach((chip) => {
     chip.disabled = false;
-});
-return bankroll;
-
+  });
+  return bankroll;
 }
-
 
 const bankrollRewards = [500, 1000, 1500, 2000, 5000];
 const newBankrollButton = document.getElementById("new-bankroll-btn");
 newBankrollButton.style.display = "none";
 
 newBankrollButton.addEventListener("click", () => {
+  newBankrollButton.disabled = true;
 
-    newBankrollButton.disabled = true;
+  playButtonSound();
+  playRollingSound();
 
-    playButtonSound();
-playRollingSound();
+  newBankrollButton.textContent = "🎰 Rolling...";
 
-    newBankrollButton.textContent = "🎰 Rolling...";
-
-    const rolling = setInterval(() => {
-
+  const rolling = setInterval(() => {
     const randomReward =
-        bankrollRewards[Math.floor(Math.random() * bankrollRewards.length)];
+      bankrollRewards[Math.floor(Math.random() * bankrollRewards.length)];
 
     newBankrollButton.textContent = `🎰 ₹${randomReward}`;
+  }, 100);
 
-}, 100);
-
-setTimeout(() => {
-
+  setTimeout(() => {
     clearInterval(rolling);
 
     rollingSound.pause();
 
-rollingSound.currentTime = 0;
+    rollingSound.currentTime = 0;
 
     const reward = generateBankroll();
 
-playerBalance = reward;
+    playerBalance = reward;
 
-balanceEl.textContent = `$${playerBalance}`;
+    balanceEl.textContent = `$${playerBalance}`;
 
-newBankrollButton.textContent = `🎉 You received ₹${reward}!`;
+    newBankrollButton.textContent = `🎉 You received ₹${reward}!`;
 
-playWinSound();
+    playWinSound();
 
-setTimeout(() => {
-
-    chipButtons.forEach(chip => {
+    setTimeout(() => {
+      chipButtons.forEach((chip) => {
         chip.style.display = "inline-block";
-    });
+      });
 
-    newBankrollButton.style.display = "none";
+      newBankrollButton.style.display = "none";
 
-    newBankrollButton.disabled = false;
+      newBankrollButton.disabled = false;
 
-    newBankrollButton.textContent = "💰 New Bankroll";
+      newBankrollButton.textContent = "💰 New Bankroll";
 
-    currentBet = 0;
-    currentBetEl.textContent = "$0";
+      currentBet = 0;
+      currentBetEl.textContent = "$0";
 
-    updateGameStatus("💰 Good luck! Build your fortune.", "lime");
+      updateGameStatus("💰 Good luck! Build your fortune.", "lime");
+    }, 1000);
 
-}, 1000);
-
-saveGame();
-
-}, 4000);
-
+    saveGame();
+  }, 4000);
 });
-
 
 const resetProgressButton = document.getElementById("reset-progress-btn");
 resetProgressButton.addEventListener("click", () => {
+  const confirmReset = confirm(
+    "⚠️ This will permanently erase all your progress.\n\nAre you sure?",
+  );
 
-    const confirmReset = confirm(
-        "⚠️ This will permanently erase all your progress.\n\nAre you sure?"
-    );
+  if (!confirmReset) {
+    return;
+  }
 
-    if (!confirmReset) {
-        return;
-    }
+  playerBalance = 1000;
 
-    playerBalance = 1000;
+  wins = 0;
+  losses = 0;
+  gamesPlayed = 0;
+  blackjacks = 0;
 
-wins = 0;
-losses = 0;
-gamesPlayed = 0;
-blackjacks = 0;
+  currentBet = 0;
 
-currentBet = 0;
+  balanceEl.textContent = "$1000";
+  currentBetEl.textContent = "$0";
 
-balanceEl.textContent = "$1000";
-currentBetEl.textContent = "$0";
+  updateStats();
 
-updateStats();
+  localStorage.removeItem("blackjackBalance");
+  localStorage.removeItem("blackjackWins");
+  localStorage.removeItem("blackjackLosses");
+  localStorage.removeItem("blackjackGames");
+  localStorage.removeItem("blackjackBlackjacks");
 
-localStorage.removeItem("blackjackBalance");
-localStorage.removeItem("blackjackWins");
-localStorage.removeItem("blackjackLosses");
-localStorage.removeItem("blackjackGames");
-localStorage.removeItem("blackjackBlackjacks");
+  updateGameStatus("🗑️ Progress Reset Successfully!", "lime");
 
-updateGameStatus("🗑️ Progress Reset Successfully!", "lime");
+  gameStarted = false;
 
-gameStarted = false;
-
-chipButtons.forEach(chip => {
+  chipButtons.forEach((chip) => {
     chip.disabled = false;
-});
+  });
 
-newBankrollButton.style.display = "none";
-newBankrollButton.disabled = false;
-newBankrollButton.textContent = "💰 New Bankroll";
-
+  newBankrollButton.style.display = "none";
+  newBankrollButton.disabled = false;
+  newBankrollButton.textContent = "💰 New Bankroll";
 });
 
 const shortcutsButton = document.getElementById("shortcuts-btn");
@@ -356,64 +320,50 @@ const modalContent = document.getElementById("modal-content");
 const closeModal = document.getElementById("close-modal");
 const helpButton = document.getElementById("help-btn");
 
-
-
 function openModal(title, content) {
+  modalTitle.textContent = title;
 
-    modalTitle.textContent = title;
+  modalContent.innerHTML = content;
 
-    modalContent.innerHTML = content;
-
-    modalOverlay.classList.remove("hidden");
-
+  modalOverlay.classList.remove("hidden");
 }
 
 function closeModalBox() {
+  console.log("Close clicked");
 
-    console.log("Close clicked");
+  modalOverlay.classList.add("hidden");
 
-    modalOverlay.classList.add("hidden");
-
-    console.log(modalOverlay.className);
-
+  console.log(modalOverlay.className);
 }
 
 closeModal.addEventListener("click", closeModalBox);
 
 shortcutsButton.addEventListener("click", () => {
+  console.log("clicked");
 
-    console.log("clicked");
-
-    openModal(
-        "⌨️ Keyboard Shortcuts",
-        `
+  openModal(
+    "⌨️ Keyboard Shortcuts",
+    `
 <b>H</b> → Hit <br><br>
 <b>S</b> → Stand <br><br>
 <b>D</b> → Double <br><br>
 <b>P</b> → Split <br><br>
 <b>R</b> → Restart Round
-`
-    );
-
+`,
+  );
 });
 
 modalOverlay.addEventListener("click", (event) => {
-
-    if (event.target === modalOverlay) {
-
-        closeModalBox();
-
-    }
-
+  if (event.target === modalOverlay) {
+    closeModalBox();
+  }
 });
 
 helpButton.addEventListener("click", () => {
+  openModal(
+    "📖 How To Play",
 
-    openModal(
-
-        "📖 How To Play",
-
-        `
+    `
 <h3>🎯 Objective</h3>
 
 Beat the dealer without going over <b>21</b>.
@@ -472,22 +422,18 @@ When your balance reaches $0, claim a New Bankroll to continue playing.
 
 • Split pairs strategically.
 
-`
-    );
-
+`,
+  );
 });
-
 
 const settingsButton = document.getElementById("settings-btn");
 let soundEnabled = true;
 
 settingsButton.addEventListener("click", () => {
+  openModal(
+    "⚙️ Settings",
 
-    openModal(
-
-        "⚙️ Settings",
-
-        `
+    `
 <div class="setting-item">
 
     <span>🔊 Sound Effects</span>
@@ -511,38 +457,32 @@ settingsButton.addEventListener("click", () => {
     <small>Version 1.0</small>
 
 </div>
-`
+`,
+  );
 
-    );
+  const soundToggle = document.getElementById("sound-toggle");
 
-    const soundToggle = document.getElementById("sound-toggle");
+  soundToggle.checked = soundEnabled;
 
-soundToggle.checked = soundEnabled;
-
-soundToggle.addEventListener("change", () => {
-
+  soundToggle.addEventListener("change", () => {
     soundEnabled = soundToggle.checked;
 
     localStorage.setItem("blackjackSound", soundEnabled);
+  });
 
-});
-
-    document.getElementById("sound-toggle").addEventListener("change", function () {
-
-        soundEnabled = this.checked;
-
+  document
+    .getElementById("sound-toggle")
+    .addEventListener("change", function () {
+      soundEnabled = this.checked;
     });
-
 });
 
 const aboutButton = document.getElementById("about-btn");
 aboutButton.addEventListener("click", () => {
+  openModal(
+    "ℹ About Blackjack Pro",
 
-    openModal(
-
-        "ℹ About Blackjack Pro",
-
-        `
+    `
 <div class="about-container">
 
     <div class="about-header">
@@ -570,10 +510,8 @@ aboutButton.addEventListener("click", () => {
 </div>
 
 </div>
-`
-
-    );
-
+`,
+  );
 });
 
 //==================================================
@@ -669,10 +607,9 @@ function dealCard(hand) {
 //=============================
 
 function startGame() {
-
-  chipButtons.forEach(chip => {
+  chipButtons.forEach((chip) => {
     chip.disabled = true;
-});
+  });
   hitButton.style.display = "inline-block";
   surrenderButton.style.display = "inline-block";
 
@@ -704,7 +641,7 @@ function startGame() {
   dealCard(dealerCards);
   dealCard(dealerCards);
 
- /*  playerCards = [
+  /*  playerCards = [
     { value: "9", suit: "♠" },
     { value: "9", suit: "♥" }
 ];
@@ -789,8 +726,8 @@ function split() {
     return;
   }
 
-playerBalance -= currentBet;
-balanceEl.textContent = `$${playerBalance}`;
+  playerBalance -= currentBet;
+  balanceEl.textContent = `$${playerBalance}`;
 
   isSplit = true;
 
@@ -828,7 +765,7 @@ balanceEl.textContent = `$${playerBalance}`;
   console.log([...playerCards]);
   console.log([...splitHand]);
 
-  saveGame()
+  saveGame();
 }
 //=====================================
 // PLAYER HIT
@@ -866,22 +803,20 @@ function hit() {
   }
   console.log("Player Score:", score);
 
-if (score > 21) {
-
+  if (score > 21) {
     playBustSound();
 
     alert("💥 BUST!");
 
     if (isSplit && currentHand === 1) {
+      currentHand = 2;
 
-        currentHand = 2;
+      document.getElementById("hand1-title").classList.remove("active-hand");
+      document.getElementById("hand2-title").classList.add("active-hand");
 
-        document.getElementById("hand1-title").classList.remove("active-hand");
-        document.getElementById("hand2-title").classList.add("active-hand");
+      updateGameStatus("💥 Hand 1 Bust! 👉 Playing Hand 2", "orange");
 
-        updateGameStatus("💥 Hand 1 Bust! 👉 Playing Hand 2", "orange");
-
-        return;
+      return;
     }
 
     gameStarted = false;
@@ -891,8 +826,7 @@ if (score > 21) {
     updateScores();
 
     checkWinner();
-
-}
+  }
 }
 
 //=====================================
@@ -927,15 +861,14 @@ function checkInsurance() {
     playerBalance -= insuranceBet;
     balanceEl.textContent = `$${playerBalance}`;
     if (playerBalance <= 0) {
-
-    chipButtons.forEach(chip => {
+      chipButtons.forEach((chip) => {
         chip.style.display = "none";
-    });
+      });
 
-    newBankrollButton.style.display = "inline-block";
+      newBankrollButton.style.display = "inline-block";
 
-    updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
-}
+      updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
+    }
 
     updateGameStatus(`❌ Insurance Lost!`, "red");
   }
@@ -1029,15 +962,14 @@ function double() {
 
   balanceEl.textContent = `$${playerBalance}`;
   if (playerBalance <= 0) {
-
-    chipButtons.forEach(chip => {
-        chip.style.display = "none";
+    chipButtons.forEach((chip) => {
+      chip.style.display = "none";
     });
 
     newBankrollButton.style.display = "inline-block";
 
     updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
-}
+  }
 
   currentBetEl.textContent = `$${currentHand === 1 ? hand1Bet : hand2Bet}`;
 
@@ -1109,8 +1041,6 @@ function compareHand(hand, handName) {
 
 function checkWinner() {
   if (isSplit) {
-
-
     const hand1Result = compareHand(playerCards, "Hand 1");
 
     const hand2Result = compareHand(splitHand, "Hand 2");
@@ -1125,8 +1055,8 @@ function checkWinner() {
     }
 
     if (playerBalance < 0) {
-    playerBalance = 0;
-}
+      playerBalance = 0;
+    }
 
     updateGameStatus(`${hand1Result} | ${hand2Result}`, "gold");
 
@@ -1138,15 +1068,14 @@ function checkWinner() {
 
     balanceEl.textContent = `$${playerBalance}`;
     if (playerBalance <= 0) {
-
-    chipButtons.forEach(chip => {
+      chipButtons.forEach((chip) => {
         chip.style.display = "none";
-    });
+      });
 
-    newBankrollButton.style.display = "inline-block";
+      newBankrollButton.style.display = "inline-block";
 
-    updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
-}
+      updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
+    }
 
     currentBet = 0;
 
@@ -1154,14 +1083,13 @@ function checkWinner() {
 
     gameStarted = false;
 
-
     updateButtons();
 
-        chipButtons.forEach(chip => {
-    chip.disabled = false;
-});
+    chipButtons.forEach((chip) => {
+      chip.disabled = false;
+    });
 
-saveGame();
+    saveGame();
     return;
   }
   console.log("✅ checkWinner called");
@@ -1222,15 +1150,14 @@ saveGame();
 
   balanceEl.textContent = `$${playerBalance}`;
   if (playerBalance <= 0) {
-
-    chipButtons.forEach(chip => {
-        chip.style.display = "none";
+    chipButtons.forEach((chip) => {
+      chip.style.display = "none";
     });
 
     newBankrollButton.style.display = "inline-block";
 
     updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
-}
+  }
 
   currentBet = 0;
 
@@ -1238,13 +1165,13 @@ saveGame();
 
   gameStarted = false;
 
-      chipButtons.forEach(chip => {
+  chipButtons.forEach((chip) => {
     chip.disabled = false;
-});
+  });
 
   updateButtons();
 
-  saveGame()
+  saveGame();
 }
 
 //=====================================
@@ -1395,15 +1322,14 @@ function checkBlackjack() {
 
       balanceEl.textContent = `$${playerBalance}`;
       if (playerBalance <= 0) {
+        chipButtons.forEach((chip) => {
+          chip.style.display = "none";
+        });
 
-    chipButtons.forEach(chip => {
-        chip.style.display = "none";
-    });
+        newBankrollButton.style.display = "inline-block";
 
-    newBankrollButton.style.display = "inline-block";
-
-    updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
-}
+        updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
+      }
 
       currentBet = 0;
       currentBetEl.textContent = "$0";
@@ -1419,20 +1345,18 @@ function checkBlackjack() {
       updateStats();
 
       playBlackjackSound();
-      saveGame()
+      saveGame();
 
       updateGameStatus("🃏 BLACKJACK! Player Wins!", "gold");
       gameStarted = false;
     }
 
-        chipButtons.forEach(chip => {
-    chip.disabled = false;
-});
+    chipButtons.forEach((chip) => {
+      chip.disabled = false;
+    });
 
     return true;
   }
-  
-  
 
   return false;
 }
@@ -1443,9 +1367,9 @@ function checkBlackjack() {
 
 function newGame() {
   playButtonSound();
-   chipButtons.forEach(chip => {
+  chipButtons.forEach((chip) => {
     chip.disabled = false;
-});
+  });
 
   surrenderButton.style.display = "none";
   insuranceButton.style.display = "none";
@@ -1605,15 +1529,14 @@ function surrender() {
 
   balanceEl.textContent = `$${playerBalance}`;
   if (playerBalance <= 0) {
-
-    chipButtons.forEach(chip => {
-        chip.style.display = "none";
+    chipButtons.forEach((chip) => {
+      chip.style.display = "none";
     });
 
     newBankrollButton.style.display = "inline-block";
 
     updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
-}
+  }
 
   updateGameStatus("🏳 Player Surrendered!", "orange");
 
@@ -1637,44 +1560,27 @@ function surrender() {
 
   updateButtons();
 
-      chipButtons.forEach(chip => {
+  chipButtons.forEach((chip) => {
     chip.disabled = false;
-});
+  });
 
-  saveGame()
+  saveGame();
 }
 
-
 document.addEventListener("keydown", (event) => {
+  const key = event.key.toLowerCase();
 
-    const key = event.key.toLowerCase();
-
-    if (key === "h") {
-
-        hit();
-
-    }
-    else if (key === "s") {
-
-        stand();
-
-    }
-    else if (key === "d") {
-
-        double();
-
-    }
-    else if (key === "p") {
-
-        split();
-
-    }
-    else if (key === "r") {
-
-        newGame();
-
-    }
-
+  if (key === "h") {
+    hit();
+  } else if (key === "s") {
+    stand();
+  } else if (key === "d") {
+    double();
+  } else if (key === "p") {
+    split();
+  } else if (key === "r") {
+    newGame();
+  }
 });
 updateButtons();
 loadGame();

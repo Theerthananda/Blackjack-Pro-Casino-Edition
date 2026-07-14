@@ -1665,7 +1665,7 @@ body {
   }
 
   body::before {
-    content: "📱 Rotate your device\A\A for the best Blackjack experience, rotate your phone to Landscape.";
+    content: "🎰 Welcome to Blackjack Pro!\A\A This game is designed for the best experience in Landscape mode.\A\A Please rotate your device.\A\A If rotation isn't available, enable 'Desktop Site' in your browser.";
     white-space: pre-line;
     position: fixed;
     inset: 0;
