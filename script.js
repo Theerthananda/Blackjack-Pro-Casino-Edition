@@ -607,9 +607,20 @@ function dealCard(hand) {
 //=============================
 
 function startGame() {
+
+  currentHand = 1;
+
+  hand1Bet = 0;
+  hand2Bet = 0;
+
+  insuranceBet = 0;
+
+  isSplit = false;
+
   chipButtons.forEach((chip) => {
     chip.disabled = true;
   });
+
   hitButton.style.display = "inline-block";
   surrenderButton.style.display = "inline-block";
 
@@ -618,21 +629,19 @@ function startGame() {
 
   doubleButton.disabled = false;
   splitButton.disabled = false;
+
   playerCards = [];
   dealerCards = [];
   splitHand = [];
-  isSplit = false;
 
   document.getElementById("hand2-title").style.display = "none";
   document.getElementById("split-score-container").style.display = "none";
   document.getElementById("split-score").textContent = "0";
 
   document.getElementById("split-cards").style.display = "none";
-
   document.getElementById("split-cards").innerHTML = "";
 
   document.getElementById("hand1-title").classList.remove("active-hand");
-
   document.getElementById("hand2-title").classList.remove("active-hand");
 
   dealCard(playerCards);
@@ -641,27 +650,11 @@ function startGame() {
   dealCard(dealerCards);
   dealCard(dealerCards);
 
-  /*  playerCards = [
-    { value: "9", suit: "♠" },
-    { value: "9", suit: "♥" }
-];
-
-dealerCards = [
-    { value: "7", suit: "♣" },
-    { value: "5", suit: "♦" }
-];
-*/
   if (dealerCards[0].value === "A") {
     insuranceButton.style.display = "inline-block";
   } else {
     insuranceButton.style.display = "none";
   }
-
-  //console.log("PLAYER");
-  //console.log(playerCards);
-
-  //console.log("DEALER");
-  //console.log(dealerCards);
 
   renderPlayerCards();
   checkSplit();
@@ -674,7 +667,6 @@ dealerCards = [
 
   if (checkBlackjack()) {
     gameStarted = false;
-
     return;
   }
 
@@ -1089,6 +1081,14 @@ function checkWinner() {
       chip.disabled = false;
     });
 
+    // Reset split state
+isSplit = false;
+currentHand = 1;
+splitHand = [];
+hand1Bet = 0;
+hand2Bet = 0;
+insuranceBet = 0;
+
     saveGame();
     return;
   }
@@ -1097,7 +1097,7 @@ function checkWinner() {
   const playerScore = calculateScore(playerCards);
   const dealerScore = calculateScore(dealerCards);
 
-  console.log(balance);
+
   console.log(currentBet);
 
   if (playerScore > 21) {
@@ -1367,6 +1367,7 @@ function checkBlackjack() {
 
 function newGame() {
   playButtonSound();
+
   chipButtons.forEach((chip) => {
     chip.disabled = false;
   });
@@ -1374,6 +1375,14 @@ function newGame() {
   surrenderButton.style.display = "none";
   insuranceButton.style.display = "none";
   splitButton.style.display = "none";
+
+  // Reset split state
+  currentHand = 1;
+  isSplit = false;
+  splitHand = [];
+  hand1Bet = 0;
+  hand2Bet = 0;
+  insuranceBet = 0;
 
   playerCards = [];
   dealerCards = [];
