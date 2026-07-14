@@ -1,261 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BlackJack Pro | Casino Edition</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-</head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<body>
-
+  <body>
     <main class="game-container">
+      <!-- ================= HEADER ================= -->
 
-        <!-- ================= HEADER ================= -->
-
-        <header class="header">
-
-
-            <div class="logo">
-                <h1>♠ BLACKJACK PRO ♠</h1>
-                <p>Casino Edition</p>
-            </div>
-
-          <div class="top-buttons">
-
-    <button id="shortcuts-btn" class="helper-btn">Shortcuts</button>
-
-    <button id="help-btn" class="helper-btn">Help</button>
-
-    <button id="settings-btn" class="helper-btn">Settings</button>
-
-    <button id="about-btn">ℹ About</button>
-
-</div>
-            <!-- ================= GAME INFO ================= -->
-
-
-            <div class="game-info">
-
-                <div class="info-item">
-                    💰 Balance :
-                    <span id="balance">$1000</span>
-                </div>
-
-                <div class="info-item">
-                    🎯 Current Bet :
-                    <span id="current-bet">$0</span>
-                </div>
-
-            </div>
-
-        </header>
-
-
-
-        <!-- ================= BETTING ================= -->
-
-
-
-        <!-- ================= PLAYER ================= -->
-
-        <div class="game-board">
-            <!-- ================= DEALER ================= -->
-
-            <section class="dealer-section">
-
-                <h2 class="section-title">
-                    🤵 Dealer
-                </h2>
-
-                <p class="score">
-                    Score :
-                    <span id="dealer-score">?</span>
-                </p>
-
-                <div id="dealer-cards" class="card-container">
-
-                </div>
-
-            </section>
-
-
-            <section class="player-section">
-
-                <h2 class="section-title" id="hand1-title">
-                    👤 Hand 1
-                </h2>
-
-                <p class="score">
-                    Score :
-                    <span id="player-score">0</span>
-                </p>
-
-                <div id="player-cards" class="card-container"></div>
-
-                <h3 id="hand2-title" style="display:none; margin-top:20px;">
-                    👤 Hand 2
-                </h3>
-                <p class="score" id="split-score-container" style="display:none;">
-                    Score :
-                    <span id="split-score">0</span>
-                </p>
-
-                <div id="split-cards" class="card-container" style="display:none;">
-                </div>
-
-            </section>
-
+      <header class="header">
+        <div class="logo">
+          <h1>♠ BLACKJACK PRO ♠</h1>
+          <p>Casino Edition</p>
         </div>
 
+        <div class="top-buttons">
+          <button id="shortcuts-btn" class="helper-btn">Shortcuts</button>
 
-        <div class="bottom-panel">
+          <button id="help-btn" class="helper-btn">Help</button>
 
-            <section class="betting-section">
+          <button id="settings-btn" class="helper-btn">Settings</button>
 
-                <h2 class="section-title">
-                    💰 Place Your Bet
-                </h2>
+          <button id="about-btn">ℹ About</button>
+        </div>
+        <!-- ================= GAME INFO ================= -->
 
-                <div class="chip-container">
+        <div class="game-info">
+          <div class="info-item">
+            💰 Balance :
+            <span id="balance">$1000</span>
+          </div>
 
-                    <button id="new-bankroll-btn"  class="game-btn">💰 New Bankroll</button>
+          <div class="info-item">
+            🎯 Current Bet :
+            <span id="current-bet">$0</span>
+          </div>
+        </div>
+      </header>
 
-                    <button class="chip" data-bet="10">$10</button>
+      <!-- ================= BETTING ================= -->
 
-                    <button class="chip" data-bet="25">$25</button>
+      <!-- ================= PLAYER ================= -->
 
-                    <button class="chip" data-bet="50">$50</button>
+      <div class="game-board">
+        <!-- ================= DEALER ================= -->
 
-                    <button class="chip" data-bet="100">$100</button>
+        <section class="dealer-section">
+          <h2 class="section-title">🤵 Dealer</h2>
 
-                    <button class="chip all-in" data-bet="all">
-                        ALL IN
-                    </button>
+          <p class="score">
+            Score :
+            <span id="dealer-score">?</span>
+          </p>
 
-                </div>
-            </section>
+          <div id="dealer-cards" class="card-container"></div>
+        </section>
 
-            <!-- ================= CONTROLS ================= -->
+        <section class="player-section">
+          <h2 class="section-title" id="hand1-title">👤 Hand 1</h2>
 
-            <section class="controls-section">
-                <h2 class="section-title">
-                    🎮 Game Controls
-                </h2>
+          <p class="score">
+            Score :
+            <span id="player-score">0</span>
+          </p>
 
-                <div class="controls-buttons">
+          <div id="player-cards" class="card-container"></div>
 
-                    <button id="deal-btn" class="game-btn primary">
-                        🎴 Deal
-                    </button>
+          <h3 id="hand2-title" style="display: none; margin-top: 20px">
+            👤 Hand 2
+          </h3>
+          <p class="score" id="split-score-container" style="display: none">
+            Score :
+            <span id="split-score">0</span>
+          </p>
 
-                    <button id="hit-btn" class="game-btn">
-                        ➕ Hit
-                    </button>
+          <div
+            id="split-cards"
+            class="card-container"
+            style="display: none"
+          ></div>
+        </section>
+      </div>
 
-                    <button id="insurance-btn" class="game-btn">🛡Insurance</button>
-                    <button id="surrender-btn" class="game-btn">🏳 Surrender</button>
+      <div class="bottom-panel">
+        <section class="betting-section">
+          <h2 class="section-title">💰 Place Your Bet</h2>
 
+          <div class="chip-container">
+            <button id="new-bankroll-btn" class="game-btn">
+              💰 New Bankroll
+            </button>
 
-                    <button id="split-btn" class="game-btn">
-                        ✂️ Split
-                    </button>
+            <button class="chip" data-bet="10">$10</button>
 
-                    <button id="stand-btn" class="game-btn">
-                        ✋ Stand
-                    </button>
+            <button class="chip" data-bet="25">$25</button>
 
-                    <button id="double-btn" class="game-btn">
-                        💵 Double
-                    </button>
+            <button class="chip" data-bet="50">$50</button>
 
-                    <button id="new-game-btn" class="game-btn danger">
-                        🔄 Restart
-                    </button>
+            <button class="chip" data-bet="100">$100</button>
 
-                    <button id="reset-progress-btn" class="game-btn">
-    🗑️ Reset
-</button>
+            <button class="chip all-in" data-bet="all">ALL IN</button>
+          </div>
+        </section>
 
-                </div>
+        <!-- ================= CONTROLS ================= -->
 
-            </section>
+        <section class="controls-section">
+          <h2 class="section-title">🎮 Game Controls</h2>
+
+          <div class="controls-buttons">
+            <button id="deal-btn" class="game-btn primary">🎴 Deal</button>
+
+            <button id="hit-btn" class="game-btn">➕ Hit</button>
+
+            <button id="insurance-btn" class="game-btn">🛡Insurance</button>
+            <button id="surrender-btn" class="game-btn">🏳 Surrender</button>
+
+            <button id="split-btn" class="game-btn">✂️ Split</button>
+
+            <button id="stand-btn" class="game-btn">✋ Stand</button>
+
+            <button id="double-btn" class="game-btn">💵 Double</button>
+
+            <button id="new-game-btn" class="game-btn danger">
+              🔄 Restart
+            </button>
+
+            <button id="reset-progress-btn" class="game-btn">🗑️ Reset</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= STATUS ================= -->
+
+      <section class="status-section">
+        <h3>Game Status</h3>
+
+        <p id="game-status">
+          Welcome to BlackJack Pro! Place your bet to begin.
+        </p>
+      </section>
+
+      <!-- ================= STATS ================= -->
+
+      <section class="stats-section">
+        <div class="stat-card">
+          <h3>Wins</h3>
+          <p id="wins">0</p>
         </div>
 
+        <div class="stat-card">
+          <h3>Losses</h3>
+          <p id="losses">0</p>
+        </div>
 
+        <div class="stat-card">
+          <h3>Blackjacks</h3>
+          <p id="blackjacks">0</p>
+        </div>
 
-
-        <!-- ================= STATUS ================= -->
-
-        <section class="status-section">
-
-            <h3>Game Status</h3>
-
-            <p id="game-status">
-                Welcome to BlackJack Pro! Place your bet to begin.
-            </p>
-
-        </section>
-
-        <!-- ================= STATS ================= -->
-
-        <section class="stats-section">
-
-            <div class="stat-card">
-                <h3>Wins</h3>
-                <p id="wins">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Losses</h3>
-                <p id="losses">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Blackjacks</h3>
-                <p id="blackjacks">0</p>
-            </div>
-
-            <div class="stat-card">
-                <h3>Games</h3>
-                <p id="games-played">0</p>
-            </div>
-
-        </section>
-
+        <div class="stat-card">
+          <h3>Games</h3>
+          <p id="games-played">0</p>
+        </div>
+      </section>
     </main>
 
-<!-- Your entire page -->
+    <!-- Your entire page -->
 
-
-
-<div id="modal-overlay" class="hidden">
-
-    <div id="info-modal">
-
+    <div id="modal-overlay" class="hidden">
+      <div id="info-modal">
         <div class="modal-header">
+          <h2 id="modal-title"></h2>
 
-            <h2 id="modal-title"></h2>
-
-            <button id="close-modal">✖</button>
-
+          <button id="close-modal">✖</button>
         </div>
 
         <div id="modal-content"></div>
-
+      </div>
     </div>
 
-</div>
-
-<script src="script.js"></script>
-
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
