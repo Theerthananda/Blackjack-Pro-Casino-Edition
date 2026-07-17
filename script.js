@@ -952,15 +952,6 @@ function double() {
   }
 
   balanceEl.textContent = `$${playerBalance}`;
-  if (playerBalance <= 0) {
-    chipButtons.forEach((chip) => {
-      chip.style.display = "none";
-    });
-
-    newBankrollButton.style.display = "inline-block";
-
-    updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
-  }
 
   currentBetEl.textContent = `$${currentHand === 1 ? hand1Bet : hand2Bet}`;
 
@@ -1033,7 +1024,6 @@ function compareHand(hand, handName) {
 function checkWinner() {
   if (isSplit) {
     const hand1Result = compareHand(playerCards, "Hand 1");
-
     const hand2Result = compareHand(splitHand, "Hand 2");
 
     // Apply loss for each losing hand
@@ -1054,10 +1044,11 @@ function checkWinner() {
     playSplitSound();
 
     gamesPlayed++;
-
     updateStats();
 
     balanceEl.textContent = `$${playerBalance}`;
+
+    // Game Over UI
     if (playerBalance <= 0) {
       chipButtons.forEach((chip) => {
         chip.style.display = "none";
@@ -1066,10 +1057,15 @@ function checkWinner() {
       newBankrollButton.style.display = "inline-block";
 
       updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
+    } else {
+      chipButtons.forEach((chip) => {
+        chip.style.display = "inline-block";
+      });
+
+      newBankrollButton.style.display = "none";
     }
 
     currentBet = 0;
-
     currentBetEl.textContent = "$0";
 
     gameStarted = false;
@@ -1091,6 +1087,7 @@ function checkWinner() {
     saveGame();
     return;
   }
+
   console.log("✅ checkWinner called");
 
   const playerScore = calculateScore(playerCards);
@@ -1102,51 +1099,56 @@ function checkWinner() {
     playerBalance -= currentBet;
 
     losses++;
-
     gamesPlayed++;
-
     updateStats();
+
     playLoseSound();
     updateGameStatus("💥 BUST! Dealer Wins!", "red");
+
   } else if (dealerScore > 21) {
     playerBalance += currentBet;
 
     wins++;
-
     gamesPlayed++;
-
     updateStats();
+
     playWinSound();
     updateGameStatus("🎉 Dealer Bust! Player Wins!", "lime");
+
   } else if (playerScore > dealerScore) {
     playerBalance += currentBet;
 
     wins++;
-
     gamesPlayed++;
-
     updateStats();
+
     playWinSound();
     updateGameStatus("🏆 Player Wins!", "lime");
+
   } else if (dealerScore > playerScore) {
     playerBalance -= currentBet;
 
     losses++;
-
     gamesPlayed++;
-
     updateStats();
+
     playLoseSound();
     updateGameStatus("🤵 Dealer Wins!", "red");
+
   } else {
     gamesPlayed++;
-
     updateStats();
 
     updateGameStatus("🤝 Push! It's a Draw.", "dodgerblue");
   }
 
+  if (playerBalance < 0) {
+    playerBalance = 0;
+  }
+
   balanceEl.textContent = `$${playerBalance}`;
+
+  // Game Over UI
   if (playerBalance <= 0) {
     chipButtons.forEach((chip) => {
       chip.style.display = "none";
@@ -1155,10 +1157,15 @@ function checkWinner() {
     newBankrollButton.style.display = "inline-block";
 
     updateGameStatus("💸 GAME OVER! Get a New Bankroll.", "red");
+  } else {
+    chipButtons.forEach((chip) => {
+      chip.style.display = "inline-block";
+    });
+
+    newBankrollButton.style.display = "none";
   }
 
   currentBet = 0;
-
   currentBetEl.textContent = "$0";
 
   gameStarted = false;
@@ -1171,7 +1178,6 @@ function checkWinner() {
 
   saveGame();
 }
-
 //=====================================
 // RENDER PLAYER CARDS
 //=====================================
